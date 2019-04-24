@@ -364,9 +364,9 @@ void sinRC(boolean flag) {
  */
 void limitMouse() {
   if (mouseX <= width && mouseY <= 200) {
-    cam.setMouseControlled(false);
+    cam.setActive(false);
   } else {
-    cam.setMouseControlled(true);
+    cam.setActive(true);
   }
 }
  
