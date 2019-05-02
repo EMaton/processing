@@ -3,7 +3,7 @@ class RoadCar extends Road {
   float a, b;
   int skip;
   boolean sin;
-  // float mult = 1;
+  float[] vehiclePositions;
 
   RoadCar(PVector position) {
     super(position, new PVector(2 * width, 100, 0));
@@ -13,18 +13,46 @@ class RoadCar extends Road {
     b = 1/100.0;
 
     sin = false;
+
+    vehiclePositions = new float[zValues.length];
   }
 
   // Layout of the Car Road
   void layoutRoad() {
+    float a = this.a * vehiclesOnRoad() / amount;
+    float p = PI / this.b;
+
+    for (Vehicle v : vehicles) {
+      if (v.onBridge()) {
+        float z = calculateZ(int(v.position.x / 10), v.position.x, a, p);
+
+        float red = z % 156 + 100;
+        float green = 255 - z % 101;
+        float blue = z;
+        v.c = color(red, green, blue);
+
+        float multi = z/a + 1;
+        if (!Float.isNaN(multi)) {
+          v.multiplier = multi;
+        }
+
+        // vehiclePositions[int(v.position.x / 10)] += v.velocity / 2;
+        int previousIdx = int((v.position.x - v.multiplier * v.velocity) / 10);
+        int currentIdx = int(v.position.x / 10);
+        for (int j = previousIdx; j <= currentIdx; j++) {
+          // Because velocity can have increase so that the previous position is BEFORE the bridge.
+          if (0 <= j) {
+          vehiclePositions[j] += v.velocity;
+          }
+        }
+      }
+    }
+
     // Road
     stroke(0);
     beginShape();
     rect(position.x, position.y, size.x, size.y);
     endShape();
-
-    float a = this.a * vehiclesOnRoad() / amount;
-    float p = PI / this.b;
 
     // Frames
     strokeWeight(10);
@@ -33,7 +61,7 @@ class RoadCar extends Road {
     beginShape();
     for (int j = 0; j < zValues.length; j++) {
       int x = j * precision;
-      float z = calculateZ(x, a, p);
+      float z = calculateZ(j, x, a, p);
 
       vertex(position.x + x, size.y, z);
 
@@ -45,45 +73,26 @@ class RoadCar extends Road {
     }
     endShape();
 
-    // TODO:
-    //
-    // - make multiplier (default value: 1) for height (z) => float z = multi * calcZ()
-    // - make toggle for every color (r, g, b), turn on and off.
-    // if (red && green && blue) {
-    //    v.c = color(red, green, blue)
-    // } else if (red && green & !blue) {
-    //    v.c = color(red, green, 0)
-    // } else if ...
-    // OR
-    // if (red) {
-    //   if (green) {
-    //     if (blue) {
-    //        v.c = color(red, green, blue)
-    //     } else {
-    //        v.c = color(red, green, 0)
-    //     }
-    //   } else {}
-    // } else {
-    // }
-    for (Vehicle v : vehicles) {
-      float z = calculateZ(v.position.x, a, p);
-
-      float red = z % 156 + 100;
-      float green = 255 - z % 101;
-      float blue = z;
-      v.c = color(red, green, blue);
+    for (int j = 0; j < vehiclePositions.length; j++) {
+      // TODO: add slider 'influence' just from 1 to 1.10.
+      vehiclePositions[j] /= 1.05;
     }
   }
 
   // Calculate height according to the given x position.
-  float calculateZ(float x, float a, float p) {
+  // Z always between -a and 3a.
+  float calculateZ(int idx, float x, float a, float p) {
+    // 0 and 2a
     float z = a * cos(this.b * (x - p/2)) + a;
 
     // Extra Curve
+    // -a and a
     if (sin) {
       z += a * sin(2 * this.b * x);
     }
-    return z;
+
+    // -a and 3a
+    return z + vehiclePositions[idx];
   }
 
   // Adds a Vehicle

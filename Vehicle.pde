@@ -7,6 +7,7 @@ abstract class Vehicle {
   PVector position;
   // Velocity
   float velocity;
+  float multiplier = 1;
   // Veheicle Color
   color c = color(255);
 
@@ -28,7 +29,7 @@ abstract class Vehicle {
     popStyle();
 
     // x Movement
-    position.x += velocity;
+    position.x += multiplier * velocity;
     if (position.x > 2 * road.size.x) position.x = - road.size.x;
 
     // z Movement

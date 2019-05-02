@@ -1,6 +1,8 @@
 import peasy.*;
 import controlP5.*;
 
+int gem = 0;
+
 PeasyCam cam;
 ControlP5 control;
 
