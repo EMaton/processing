@@ -1,8 +1,8 @@
 // abstract class for all roads
 abstract class Road {
 
-  // Amount of vehicles
-  int amount;
+  // Amount of vehicles (for buttons)
+  int amount = 0;
 
   // Position & Size of Bridge/Road
   PVector position, size;
@@ -12,7 +12,7 @@ abstract class Road {
 
   // Bridge Height Values
   float[] zValues;
-  // Draw Precision
+  // Draw Precision (for drawing meshes)
   int precision;
 
   Road(PVector position, PVector size) {
@@ -20,7 +20,6 @@ abstract class Road {
     this.size = size;
 
     // Add 10 Vehicles
-    amount = 0;
     vehicles = new ArrayList();
     for (int i = 0; i < 10; i++) {
       addVehicle();
@@ -31,10 +30,18 @@ abstract class Road {
     zValues = new float[(int) (size.x / precision) + 1];
   }
 
-  // Every Road has to implement these functions
-  abstract void layoutRoad();
+  // Dependant on sub-class
   abstract void addVehicle();
-  abstract void removeVehicle();
+  
+  void removeVehicle() {
+    if (vehicles.size() > 0) {
+      vehicles.remove(0);
+      amount--;
+    }
+  }
+  
+  // Every Road has to implement this function
+  abstract void layoutRoad();
 
   // Rendering Road
   void render() {
@@ -48,8 +55,18 @@ abstract class Road {
       // Translate to 0-Position of the Road,
       // so the vehicles origin is left-top corner of the Road
       translate(position.x, position.y);
-      v.render(); 
+      v.render();
       popMatrix();
+    }
+  }
+  
+  // Every Road has to implement this function
+  abstract void updateRoad();
+
+  void update() {
+    updateRoad();
+    for (Vehicle v : vehicles) {
+      v.update();
     }
   }
 

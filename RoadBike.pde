@@ -10,17 +10,11 @@ class RoadBike extends Road {
     rect(position.x, position.y, size.x, size.y);
   }
   
+  void updateRoad() {}
+  
   // Adds a Vehicle
   void addVehicle() {
     vehicles.add(new Bike(this, new PVector(- random(size.x), random(Bike.vehicleY, size.y - Bike.vehicleY), 0)));
     amount++;
-  }
-  
-  // Removes a Vehicle
-  void removeVehicle() {
-    if (vehicles.size() > 0) {
-      vehicles.remove(0);
-      amount--;
-    }
   }
 }

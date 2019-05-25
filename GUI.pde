@@ -336,7 +336,7 @@ void bLC(float value) {
 }
 
 void sLC(float value) {
-  carLeft.skip = (int) value;
+  carLeft.createColumns((int) value);
 }
 
 void sinLC(boolean flag) {
@@ -352,7 +352,7 @@ void bRC(float value) {
 }
 
 void sRC(float value) {
-  carRight.skip = (int) value;
+  carRight.createColumns((int) value);
 }
 
 void sinRC(boolean flag) {

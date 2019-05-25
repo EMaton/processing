@@ -49,8 +49,11 @@ void draw() {
   
   // 'Right' Roads
   carRight.render();
+  carRight.update();
   bikeRight.render();
+  bikeRight.update();
   pedestrianRight.render();
+  pedestrianRight.update();
   textFont(BIG_FONT);
   textAlign(CENTER, CENTER);
   text("RIGHT", 0, 150, 0);
@@ -59,8 +62,11 @@ void draw() {
   pushMatrix();
   rotateZ(PI);
   carLeft.render();
+  carLeft.update();
+  bikeLeft.render();
   bikeLeft.render();
   pedestrianLeft.render();
+  pedestrianLeft.update();
   text("LEFT", 0, 150, 0);
   popMatrix();
   
