@@ -2,13 +2,13 @@
 abstract class Vehicle {
 
   // The Road it is driving on.
-  final Road road;
+  Road road;
   // Position of the Vehicle
   PVector position;
   // Color of the Vehicle
   color c = color(255);
   // Velocity
-  float velocity;
+  final float velocity;
   // Multiplier of the Velocity
   float multiplier = 1;
 
@@ -29,15 +29,30 @@ abstract class Vehicle {
     layoutVehicle();
     popStyle();
   }
-  
-  // Updating Vehicle
-  void update() {
+
+  abstract void onRedLight();
+  abstract void onGreenLight();
+
+  void moveForward() {
     // x Movement
     position.x += multiplier * velocity;
     // Reset after reaching the end.
     if (position.x > 2 * road.size.x) {
       position.x = - road.size.x;
     }
+  }
+
+  // Updating Vehicle
+  void update() {
+    // If 'Green': OK
+    // If 'Red' and before half and next step also: OK
+    if (!isRedLight) {
+      onGreenLight();
+    } else {
+      onRedLight();
+    }
+
+    // y Movement
 
     // z Movement
     if (onBridge()) {
@@ -52,7 +67,7 @@ abstract class Vehicle {
   void zPosition() {
     position.z = road.zValues[ceil(position.x / road.precision)];
   }
-  
+
   // Returns true if Vehicle is on the Bridge
   boolean onBridge() {
     return position.x >= 0 && position.x <= road.size.x;

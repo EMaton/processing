@@ -1,13 +1,13 @@
 void setupGUI() {
   control.setAutoDraw(false);
-  
+
   /* ControlP5 Documentation:
    *  - Button: http://www.sojamo.de/libraries/controlP5/examples/controllers/ControlP5button/ControlP5button.pde
    *  - Slider: http://www.sojamo.de/libraries/controlP5/examples/controllers/ControlP5slider/ControlP5slider.pde
    *  - Toggle: http://www.sojamo.de/libraries/controlP5/examples/controllers/ControlP5toggle/ControlP5toggle.pde
    */
-  
-  
+
+
   /*
    * Left Pedestrian Road
    *  - Buttons and Sliders
@@ -51,7 +51,7 @@ void setupGUI() {
     .setSize(50, 20)
     .setNumberOfTickMarks(6)
     .setCaptionLabel("Width (2)");
-    
+
   /*
    * Right Pedestrian Road
    *  - Buttons and Sliders
@@ -95,7 +95,7 @@ void setupGUI() {
     .setSize(50, 20)
     .setNumberOfTickMarks(6)
     .setCaptionLabel("Width (2)");
-    
+
   /*
    * Left Bike Road
    * - Buttons
@@ -111,7 +111,7 @@ void setupGUI() {
     .setPosition(x, 60)
     .setSize(20, 20)
     .setCaptionLabel("-");
-  
+
   /*
    * Right Bike Road
    * - Buttons
@@ -126,7 +126,7 @@ void setupGUI() {
     .setPosition(x, 150)
     .setSize(20, 20)
     .setCaptionLabel("-");
-    
+
   /*
    * Left Car Road
    * - Buttons, Sliders and Toggle
@@ -164,12 +164,12 @@ void setupGUI() {
     .setNumberOfTickMarks(10)
     .setCaptionLabel("Frame");
   control.addToggle("sinLC")
-     .setPosition(x, 150)
-     .setSize(50,20)
-     .setValue(false)
-     .setMode(ControlP5.SWITCH)
-     .setCaptionLabel("Extra Curve");
-    
+    .setPosition(x, 150)
+    .setSize(50, 20)
+    .setValue(false)
+    .setMode(ControlP5.SWITCH)
+    .setCaptionLabel("Extra Curve");
+
   /*
    * Right Car Road
    * - Buttons, Sliders and Toggle
@@ -208,10 +208,19 @@ void setupGUI() {
     .setCaptionLabel("Frame");
   control.addToggle("sinRC")
     .setPosition(x, 150)
-    .setSize(50,20)
+    .setSize(50, 20)
     .setValue(false)
     .setMode(ControlP5.SWITCH)
     .setCaptionLabel("Extra Curve");
+
+  /*
+   * Red/Green Light
+   */
+  control.addButton("toggleLight")
+    .setValue(0)
+    .setPosition(750, 30)
+    .setSize(50, 50)
+    .setCaptionLabel("toggle");
 }
 
 /*
@@ -220,12 +229,12 @@ void setupGUI() {
 void renderGUI() {
   cam.beginHUD();
   pushStyle();
-  
+
   // Background Fill
   noStroke();
   fill(255, 120);
   rect(0, 0, width, 200);
-  
+
   // Text
   fill(255);
   text("Left Pedestrian Roads", 20, 15);
@@ -246,6 +255,14 @@ void renderGUI() {
   text("Amount: " + carLeft.amount, 510, 25);
   text("Right Car Road", 620, 15);
   text("Amount: " + carRight.amount, 620, 25);
+  
+  // Red/Green Light
+  if (!isRedLight) {
+    fill(0, 255, 0);
+  } else {
+    fill(255, 0, 0);
+  }
+  ellipse(775, 150, 50, 50);
 
   popStyle();
   control.draw();
@@ -260,34 +277,51 @@ public void controlEvent(ControlEvent theEvent) {
   // Get the name of the button pressed from event:
   switch (theEvent.getController().getName()) {
     // Pedestrian Roads
-    case "addLP":
-      pedestrianLeft.addVehicle(); break;
-    case "remLP":
-      pedestrianLeft.removeVehicle(); break;
-    case "addRP":
-      pedestrianRight.addVehicle(); break;
-    case "remRP":
-      pedestrianRight.removeVehicle(); break;
-      
+  case "addLP":
+    pedestrianLeft.addVehicle(); 
+    break;
+  case "remLP":
+    pedestrianLeft.removeVehicle(); 
+    break;
+  case "addRP":
+    pedestrianRight.addVehicle(); 
+    break;
+  case "remRP":
+    pedestrianRight.removeVehicle(); 
+    break;
+
     // Bike Roads
-    case "addLB":
-      bikeLeft.addVehicle(); break;
-    case "remLB":
-      bikeLeft.removeVehicle(); break;
-    case "addRB":
-      bikeRight.addVehicle(); break;
-    case "remRB":
-      bikeRight.removeVehicle(); break;
-      
+  case "addLB":
+    bikeLeft.addVehicle(); 
+    break;
+  case "remLB":
+    bikeLeft.removeVehicle(); 
+    break;
+  case "addRB":
+    bikeRight.addVehicle(); 
+    break;
+  case "remRB":
+    bikeRight.removeVehicle(); 
+    break;
+
     // Car Roads
-    case "addLC":
-      carLeft.addVehicle(); break;
-    case "remLC":
-      carLeft.removeVehicle(); break;
-    case "addRC":
-      carRight.addVehicle(); break;
-    case "remRC":
-      carRight.removeVehicle(); break;
+  case "addLC":
+    carLeft.addVehicle(); 
+    break;
+  case "remLC":
+    carLeft.removeVehicle(); 
+    break;
+  case "addRC":
+    carRight.addVehicle(); 
+    break;
+  case "remRC":
+    carRight.removeVehicle(); 
+    break;
+    
+    // Red/Green Light
+  case "toggleLight":
+    isRedLight = !isRedLight;
+    break;
   }
 }
 
@@ -369,11 +403,11 @@ void limitMouse() {
     cam.setActive(true);
   }
 }
- 
+
 void mousePressed() {
   limitMouse();
 }
- 
+
 void mouseDragged() {
   limitMouse();
 }

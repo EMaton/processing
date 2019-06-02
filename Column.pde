@@ -19,7 +19,7 @@ class Column {
       sumVelocity += v.velocity / 2;
       
       float mult = (columnZ + road.a) / (road.a * road.vehiclesOnRoad() / road.amount) / multDivider;
-      if (!Float.isNaN(mult)) {
+      if (!Float.isNaN(mult) && mult < 100) {
         v.multiplier = mult + 1;
       }
     }

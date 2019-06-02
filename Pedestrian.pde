@@ -15,6 +15,14 @@ class Pedestrian extends Vehicle {
     box(vehicleX, vehicleY, vehicleZ);
   }
   
+  void onRedLight() {
+    moveForward();
+  }
+  
+  void onGreenLight() {
+    moveForward();
+  }
+  
   // Overrides function from superclass (special case, two roads)
   void zPosition() {
     // z-Position in function of the y-Position
