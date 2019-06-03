@@ -4,6 +4,7 @@ import controlP5.*;
 int gem = 0;
 
 boolean isRedLight = false;
+boolean partyMode = true;
 
 PeasyCam cam;
 ControlP5 control;

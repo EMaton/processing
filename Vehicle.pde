@@ -7,7 +7,7 @@ abstract class Vehicle {
   PVector position;
   PVector size;
   // Color of the Vehicle
-  color c = color(255);
+  float col;
   // Velocity
   final float velocity;
   // Multiplier of the Velocity
