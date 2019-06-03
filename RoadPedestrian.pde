@@ -4,8 +4,11 @@ class RoadPedestrian extends Road {
   float a1, b1;
   float a2, b2;
 
-  RoadPedestrian(PVector position) {
+  RoadCar roadCar;
+
+  RoadPedestrian(PVector position, RoadCar road) {
     super(position, new PVector(2 * width, 10, 0));
+    this.roadCar = road;
 
     // Change z-Values
     precision = 5;
@@ -44,8 +47,17 @@ class RoadPedestrian extends Road {
       endShape();
     }
   }
-  
+
   void updateRoad() {
+    for (Column c : roadCar.columns) {
+      for (Vehicle v : vehicles) {
+        // Euclidian Distance From Column to Vehicle
+        if (v.onBridge() &&  euclidianDistance(c.position, v.position) < 100) {
+          c.nearVehicles.add(v);
+        }
+      }
+    }
+    
     float p1 = PI / b1; // period
     float p2 = PI / b2;
 
@@ -80,9 +92,9 @@ class RoadPedestrian extends Road {
   void addVehicle() {
     float y;
     if (random(1) < 0.5) {
-      y = random(Pedestrian.vehicleY, size.y - Pedestrian.vehicleY);
+      y = random(2.5, size.y - 2.5);
     } else {
-      y = random(size.y + Pedestrian.vehicleY, 2 * size.y - Pedestrian.vehicleY);
+      y = random(size.y + 2.5, 2 * size.y - 2.5);
     }
 
     vehicles.add(new Pedestrian(this, new PVector(- random(size.x / 4), y, 0)));

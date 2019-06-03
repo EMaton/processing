@@ -32,14 +32,14 @@ void setup() {
   BIG_FONT = createFont("Lucida Sans", 32);
 
   // Length of each road is 2 * width, - width to center
-  carRight = new RoadCar(new PVector(- 800, 0, 0));
-  bikeRight = new RoadBike(new PVector(- 800, 100, 0));
-  pedestrianRight = new RoadPedestrian(new PVector(- 800, 120, 0));
+  carRight = new RoadCar(new PVector(- 1600, 0, 0));
+  bikeRight = new RoadBike(new PVector(- 1600, 100, 0), carRight);
+  pedestrianRight = new RoadPedestrian(new PVector(- 1600, 120, 0), carRight);
 
   // These will get rotated 180°
-  carLeft = new RoadCar(new PVector(- 800, 0, 0));
-  bikeLeft = new RoadBike(new PVector(- 800, 100, 0));
-  pedestrianLeft = new RoadPedestrian(new PVector(- 800, 120, 0));
+  carLeft = new RoadCar(new PVector(- 1600, 0, 0));
+  bikeLeft = new RoadBike(new PVector(- 1600, 100, 0), carLeft);
+  pedestrianLeft = new RoadPedestrian(new PVector(- 1600, 120, 0), carLeft);
 
   // Add Roads to calculate crossing bikes.
   bikeRight.initializeOtherRoadBike(bikeLeft);

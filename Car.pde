@@ -1,29 +1,33 @@
 class Car extends Vehicle {
 
-  // Vehicle Dimensions
-  static final int vehicleX = 46;
-  static final int vehicleY = 18;
-  static final int vehicleZ = 15;
-
   Car(Road road, PVector position) {
     super(road, position, 10);
+    this.size = new PVector(46, 18, 15);
   }
 
   // Layout of the Car
   void layoutVehicle() {
-    fill(c);
-    translate(position.x, position.y, position.z + vehicleZ/2 + 1 /* +1: not visible below road */);
-    box(vehicleX, vehicleY, vehicleZ);
+    if (overlapsWithOtherVehicle(position)) {
+      fill(255, 0, 0);
+    } else {
+      fill(c);
+    }
+    translate(position.x, position.y, position.z + size.z/2 + 1 /* +1: not visible below road */);
+    box(size.x, size.y, size.z);
   }
 
   void onRedLight() {
-    float middle = road.size.x / 2 - 100;
-    if (position.x > middle || (position.x + velocity * multiplier < middle && position.x < middle)) {
-      moveForward();
+    if (!overlapsWithOtherVehicle(new PVector(nextXPosition(), position.y, position.z)) || overlapsWithOtherVehicle(position)) {
+      float middle = road.size.x / 2 - 100;
+      if (position.x > middle || (position.x + velocity * multiplier < middle && position.x < middle)) {
+        moveForward();
+      }
     }
   }
-  
+
   void onGreenLight() {
-    moveForward();
+    if (!overlapsWithOtherVehicle(new PVector(nextXPosition(), position.y, position.z))|| overlapsWithOtherVehicle(position)) {
+      moveForward();
+    }
   }
 }

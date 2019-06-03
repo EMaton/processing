@@ -62,6 +62,10 @@ abstract class Road {
   
   // Every Road has to implement this function
   abstract void updateRoad();
+  
+  float euclidianDistance(PVector a, PVector b) {
+    return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
+  }
 
   void update() {
     updateRoad();

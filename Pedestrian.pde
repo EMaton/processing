@@ -1,18 +1,13 @@
 class Pedestrian extends Vehicle {
-  
-  // Vehicle Dimensions
-  static final int vehicleX = 5;
-  static final int vehicleY = 5;
-  static final int vehicleZ = 17;
-  
   Pedestrian(Road road, PVector position) {
     super(road, position, 2);
+    this.size = new PVector(5, 5, 17);
   }
   
   // Layout of the Car
   void layoutVehicle() {
-    translate(position.x, position.y, position.z + vehicleZ/2 /* +1: not visible below road */);
-    box(vehicleX, vehicleY, vehicleZ);
+    translate(position.x, position.y, position.z + size.z/2 /* +1: not visible below road */);
+    box(size.x, size.y, size.z);
   }
   
   void onRedLight() {

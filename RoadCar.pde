@@ -4,8 +4,6 @@ class RoadCar extends Road {
   boolean sin;
   Column[] columns;
 
-  static final int distanceToColumn = 100;
-
   RoadCar(PVector position) {
     super(position, new PVector(2 * width, 100, 0));
 
@@ -44,18 +42,13 @@ class RoadCar extends Road {
 
   void updateRoad() {
     for (Column c : columns) {
-      c.near = new ArrayList();
       for (Vehicle v : vehicles) {
         // Euclidian Distance From Column to Vehicle
-        if (v.onBridge() &&  euclidianDistance(c.position, v.position) < distanceToColumn) {
-          c.near.add(v);
+        if (v.onBridge() &&  euclidianDistance(c.position, v.position) < 100) {
+          c.nearCars.add(v);
         }
       }
     }
-  }
-
-  float euclidianDistance(PVector a, PVector b) {
-    return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
   }
 
   // Calculate height according to the given x position.
@@ -76,7 +69,7 @@ class RoadCar extends Road {
 
   // Adds a Vehicle
   void addVehicle() {
-    vehicles.add(new Car(this, new PVector(- random(size.x), random(Car.vehicleY, size.y - Car.vehicleY), 0)));
+    vehicles.add(new Car(this, new PVector(- random(size.x), random(18, size.y - 18), 0)));
     amount++;
   }
 }
