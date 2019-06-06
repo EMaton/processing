@@ -19,7 +19,7 @@ class RoadCar extends Road {
     columns = new Column[int(zValues.length / skip)];
     for (int i = 0; i < columns.length; i++) {
       float x = i * precision * skip;
-      columns[i] = new Column(this, new PVector(x, size.y, 0));
+      columns[i] = new Column(this, new PVector(x, size.y, 0), (float) i / columns.length * 100);
     }
   }
 

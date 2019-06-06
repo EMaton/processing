@@ -10,7 +10,12 @@ class Car extends Vehicle {
     if (overlapsWithOtherVehicle(position)) {
       fill(255, 0, 0);
     } else {
-      fill(c);
+      if (partyMode) {
+        colorMode(HSB, 100); // for the rainbows
+        stroke(col, 100, 100);
+        fill(100 - col, 100, 100);
+        colorMode(RGB, 256); // for the rainbows
+      }
     }
     translate(position.x, position.y, position.z + size.z/2 + 1 /* +1: not visible below road */);
     box(size.x, size.y, size.z);

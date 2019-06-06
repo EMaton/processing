@@ -218,9 +218,18 @@ void setupGUI() {
    */
   control.addButton("toggleLight")
     .setValue(0)
-    .setPosition(750, 30)
+    .setPosition(750, 15)
     .setSize(50, 50)
     .setCaptionLabel("toggle");
+
+  /*
+   * Party Mode
+   */
+  control.addButton("changePartyMode")
+    .setValue(0)
+    .setPosition(1250, 15)
+    .setSize(50, 25)
+    .setCaptionLabel("rainbow");
 }
 
 /*
@@ -255,14 +264,14 @@ void renderGUI() {
   text("Amount: " + carLeft.amount, 510, 25);
   text("Right Car Road", 620, 15);
   text("Amount: " + carRight.amount, 620, 25);
-  
+
   // Red/Green Light
   if (!isRedLight) {
     fill(0, 255, 0);
   } else {
     fill(255, 0, 0);
   }
-  ellipse(775, 150, 50, 50);
+  ellipse(775, 100, 50, 50);
 
   popStyle();
   control.draw();
@@ -317,10 +326,15 @@ public void controlEvent(ControlEvent theEvent) {
   case "remRC":
     carRight.removeVehicle(); 
     break;
-    
+
     // Red/Green Light
   case "toggleLight":
     isRedLight = !isRedLight;
+    break;
+
+    // Party Mode
+  case "changePartyMode":
+    partyMode = !partyMode;
     break;
   }
 }

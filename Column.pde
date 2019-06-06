@@ -9,9 +9,12 @@ class Column {
 
   float sumVelocity = 0;
 
-  Column(RoadCar road, PVector position) {
+  float col;
+
+  Column(RoadCar road, PVector position, float c) {
     this.road = road;
     this.position = position;
+    this.col = c;
   }
 
   float columnZ() {
@@ -21,12 +24,13 @@ class Column {
     }
     nearVehicles.clear();
     sumVelocity /= 1.04;
-    
+
     for (Vehicle v : nearCars) {
       float mult = (columnZ + road.a) / (road.a * road.vehiclesOnRoad() / road.amount) / multDivider;
       if (!Float.isNaN(mult) && mult < 100) {
         v.multiplier = mult + 1;
       }
+      v.col = col;
     }
     nearCars.clear();
 
@@ -35,7 +39,13 @@ class Column {
 
   void layoutColumn() {
     strokeWeight(diameter);
-    stroke(255, 0, 0);
+    if (partyMode) {
+      colorMode(HSB, 100); // for the rainbows
+      stroke(col, 100, 100);
+      colorMode(RGB, 256); // for the rainbows
+    } else {
+      stroke(255, 0, 0);
+    }
     noFill();
     float middle = road.size.x / 2;
     if (!(isRedLight && position.x > middle - 100 && position.x < middle + 100)) {
