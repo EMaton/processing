@@ -4,7 +4,7 @@ class Pedestrian extends Vehicle {
     this.size = new PVector(5, 5, 17);
   }
   
-  // Layout of the Car
+  // Layout of the pedestrian.
   void layoutVehicle() {
     translate(position.x, position.y, position.z + size.z/2 /* +1: not visible below road */);
     box(size.x, size.y, size.z);
@@ -18,21 +18,18 @@ class Pedestrian extends Vehicle {
     moveForward();
   }
   
-  // Overrides function from superclass (special case, two roads)
+  // Overrides zPosition from super-class (special case, two roads).
   void zPosition() {
-    // z-Position in function of the y-Position
+    // If on the left road.
     if (position.y < road.size.y) {
       super.zPosition();
     } else {
       // You need to cast '(RoadPedestrian) road' 
-      // because Road itself has no zValues2[], only RoadPedestrian
+      // because Road itself has no zValues2[], only RoadPedestrian has.
       if (road instanceof RoadPedestrian) {
         // Convert abstract road to a more specific type, e.g. RoadPedestrian
         RoadPedestrian pedestrianRoad = ((RoadPedestrian) road);
         position.z = pedestrianRoad.zValues2[ceil(position.x / road.precision)];
-      } else {
-        // fail safe: it is possible to store other types of road in the variable road...
-        super.zPosition();
       }
     }
   }

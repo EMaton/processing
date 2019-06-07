@@ -344,43 +344,43 @@ public void controlEvent(ControlEvent theEvent) {
  * Every slider has a function w/ the same name
  */
 void a1LP(float value) {
-  pedestrianLeft.a1 = value;
+  pedestrianLeft.amplitude1 = value;
 }
 
 void b1LP(float value) {
-  pedestrianLeft.b1 = 1 / value;
+  pedestrianLeft.offset1 = 1 / value;
 }
 
 void a2LP(float value) {
-  pedestrianLeft.a2 = value;
+  pedestrianLeft.amplitude2 = value;
 }
 
 void b2LP(float value) {
-  pedestrianLeft.b2 = 1 / value;
+  pedestrianLeft.offset2 = 1 / value;
 }
 
 void a1RP(float value) {
-  pedestrianRight.a1 = value;
+  pedestrianRight.amplitude1 = value;
 }
 
 void b1RP(float value) {
-  pedestrianRight.b1 = 1 / value;
+  pedestrianRight.offset1 = 1 / value;
 }
 
 void a2RP(float value) {
-  pedestrianRight.a2 = value;
+  pedestrianRight.amplitude2 = value;
 }
 
 void b2RP(float value) {
-  pedestrianRight.b2 = 1 / value;
+  pedestrianRight.offset2 = 1 / value;
 }
 
 void aLC(float value) {
-  carLeft.a = value;
+  carLeft.amplitude = value;
 }
 
 void bLC(float value) {
-  carLeft.b = 1 / value;
+  carLeft.offset = 1 / value;
 }
 
 void sLC(float value) {
@@ -392,11 +392,11 @@ void sinLC(boolean flag) {
 }
 
 void aRC(float value) {
-  carRight.a = value;
+  carRight.amplitude = value;
 }
 
 void bRC(float value) {
-  carRight.b = 1 / value;
+  carRight.offset = 1 / value;
 }
 
 void sRC(float value) {

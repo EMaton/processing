@@ -1,15 +1,18 @@
 import peasy.*;
 import controlP5.*;
 
-int gem = 0;
-
+// boolean value that indicates if the trafic light is red or not.
 boolean isRedLight = false;
+// boolean value that indicates if the color mode is enabled or not.
 boolean partyMode = true;
+
+// the width of the bridge.
+final float bridgeWidth = 1600;
 
 PeasyCam cam;
 ControlP5 control;
 
-// All Roads (fixed amount)
+// All the roads crossing the bridge.
 RoadCar carRight;
 RoadCar carLeft;
 RoadBike bikeRight;
@@ -32,24 +35,24 @@ void setup() {
   SML_FONT = createFont("Lucida Sans", 12);
   BIG_FONT = createFont("Lucida Sans", 32);
 
-  // Length of each road is 2 * width, - width to center
-  carRight = new RoadCar(new PVector(- 1600, 0, 0));
-  bikeRight = new RoadBike(new PVector(- 1600, 100, 0), carRight);
-  pedestrianRight = new RoadPedestrian(new PVector(- 1600, 120, 0), carRight);
+  carRight = new RoadCar(new PVector(-bridgeWidth, 0, 0));
+  bikeRight = new RoadBike(new PVector(-bridgeWidth, 100, 0), carRight);
+  pedestrianRight = new RoadPedestrian(new PVector(-bridgeWidth, 120, 0), carRight);
 
-  // These will get rotated 180°
-  carLeft = new RoadCar(new PVector(- 1600, 0, 0));
-  bikeLeft = new RoadBike(new PVector(- 1600, 100, 0), carLeft);
-  pedestrianLeft = new RoadPedestrian(new PVector(- 1600, 120, 0), carLeft);
+  // The left side will get rotated 180° in draw().
+  carLeft = new RoadCar(new PVector(-bridgeWidth, 0, 0));
+  bikeLeft = new RoadBike(new PVector(-bridgeWidth, 100, 0), carLeft);
+  pedestrianLeft = new RoadPedestrian(new PVector(-bridgeWidth, 120, 0), carLeft);
 
-  // Add Roads to calculate crossing bikes.
+  // This bidirectional relation between the left- and right bike road can not be done in the constructors.
   bikeRight.initializeOtherRoadBike(bikeLeft);
   bikeLeft.initializeOtherRoadBike(bikeRight);
+  // Array containing all the roads between the two bike roads.
   Road[] roads = new Road[]{carLeft, carRight};
   bikeRight.initializeRoadsBetween(roads);
   bikeLeft.initializeRoadsBetween(roads);
 
-  // Controls after initializing roads, otherwise 'NullPointer'
+  // Controls after initializing roads, otherwise 'NullPointer' because the controllers access these variables.
   control = new ControlP5(this);
   setupGUI();
 }
@@ -60,27 +63,37 @@ void draw() {
   // 'Right' Roads
   carRight.render();
   carRight.update();
+
   bikeRight.render();
   bikeRight.update();
+
   pedestrianRight.render();
   pedestrianRight.update();
-  textFont(BIG_FONT);
-  textAlign(CENTER, CENTER);
-  text("RIGHT", 0, 150, 0);
 
   // 'Left' Roads (rotated 180°)
   pushMatrix();
   rotateZ(PI);
+
   carLeft.render();
   carLeft.update();
+
   bikeLeft.render();
   bikeLeft.update();
+
   pedestrianLeft.render();
   pedestrianLeft.update();
-  text("LEFT", 0, 150, 0);
+
   popMatrix();
 
   // GUI
+  textFont(BIG_FONT);
+  textAlign(CENTER, CENTER);
+  text("RIGHT", 0, 150, 0);
+  pushMatrix();
+  rotateZ(PI);
+  text("LEFT", 0, 150, 0);
+  popMatrix();
+
   textFont(SML_FONT);
   textAlign(LEFT, BOTTOM);
   renderGUI();

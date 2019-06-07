@@ -1,20 +1,24 @@
 class RoadCar extends Road {
-
-  float a, b;
+  
+  // Aplitude and offset to calculate the height of the columns.
+  float amplitude, offset;
+  // Whether or not an extra sin-function has to be added the the height of the columns.
   boolean sin;
+  
+  // Array of column on the side of the road.
   Column[] columns;
 
   RoadCar(PVector position) {
     super(position, new PVector(2 * width, 100, 0));
 
-    a = 100.0;
-    b = 1/100.0;
-
+    amplitude = 100.0;
+    offset = 1/100.0;
     sin = false;
 
     createColumns(4);
   }
-
+  
+  // Creates colunms every 'skip * precision' pixels.
   void createColumns(int skip) {
     columns = new Column[int(zValues.length / skip)];
     for (int i = 0; i < columns.length; i++) {
@@ -23,15 +27,12 @@ class RoadCar extends Road {
     }
   }
 
-  // Layout of the Car Road
   void layoutRoad() {
-    // Road
     stroke(0);
     beginShape();
     rect(position.x, position.y, size.x, size.y);
     endShape();
 
-    // Draw Road
     for (Column c : columns) {
       pushMatrix();
       translate(position.x, 0, 0);
@@ -41,33 +42,29 @@ class RoadCar extends Road {
   }
 
   void updateRoad() {
+    // Adds near vehicles to the list of near vehicles of the column.
     for (Column c : columns) {
       for (Vehicle v : vehicles) {
-        // Euclidian Distance From Column to Vehicle
-        if (v.onBridge() &&  euclidianDistance(c.position, v.position) < 100) {
-          c.nearCars.add(v);
+        // Is on bridge & euclidian distance from column to vehicle is less than the influence radius of the columns.
+        if (v.onBridge() &&  euclidianDistance(c.position, v.position) < Column.influenceRadius) {
+          c.near.add(v);
         }
       }
     }
   }
 
   // Calculate height according to the given x position.
-  // Z always between -a and 3a.
   float calculateZ(float x) {
-    // 0 and 2a
-    float z = cos(b * (x - (PI / b)/2));
+    float z = cos(offset * (x - (PI / offset)/2)); // value: [-1, 1]
 
-    // Extra Curve
-    // -a and a
+    // Extra curves.
     if (sin) {
-      z += sin(2 * b * x);
+      z += sin(2 * offset * x); // value: [-2, 2]
     }
-
-    // -a and 3a
-    return a * z;
+    
+    return amplitude * z; // value [-2a, 2a]
   }
 
-  // Adds a Vehicle
   void addVehicle() {
     vehicles.add(new Car(this, new PVector(- random(size.x), random(18, size.y - 18), 0)));
     amount++;
